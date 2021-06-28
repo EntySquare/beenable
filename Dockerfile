@@ -1,5 +1,5 @@
 FROM golang:1.15 AS build
-
+ENV GOPROXY "https://goproxy.cn"
 WORKDIR /src
 # enable modules caching in separate layer
 COPY go.mod go.sum ./
