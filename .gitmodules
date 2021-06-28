@@ -1,0 +1,3 @@
+[submodule "eth-bee"]
+	path = eth-bee
+	url = https://github.com/ethersphere/bee
