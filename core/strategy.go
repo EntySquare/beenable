@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/client-go/kubernetes"
@@ -42,11 +41,11 @@ func (s *StaticStrategy) start() {
 	sf := lib.StartBeeAffinity()
 	limitList := corev1.ResourceList{}
 	requestList := corev1.ResourceList{}
-	limitList["cpu"] = resource.MustParse("2000m")
-	requestList["cpu"] = resource.MustParse("2000m")
-	limitList["memory"] = resource.MustParse("25Gi")
-	requestList["memory"] = resource.MustParse("8Gi")
-	jbname := "entysquare-bee-job-plot-farmer-" + "-" + rand.String(10)
+	//limitList["cpu"] = resource.MustParse("2000m")
+	//requestList["cpu"] = resource.MustParse("2000m")
+	//limitList["memory"] = resource.MustParse("25Gi")
+	//requestList["memory"] = resource.MustParse("8Gi")
+	jbname := "entysquare-bee-job-" + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
 	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.UserDir, s.ImageName)
 	_, err := s.client.BatchV1().Jobs("default").Create(context.TODO(), jb, metav1.CreateOptions{})
