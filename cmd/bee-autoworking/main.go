@@ -62,26 +62,58 @@ func manual() *cli.Command {
 		Name:  "bee",
 		Usage: "starting bee based on manual options",
 		Flags: []cli.Flag{
-			//&cli.StringFlag{
-			//	Name:  "p",
-			//	Usage: "used for plotting for cert pool",
-			//},
-			//&cli.StringFlag{
-			//	Name:  "f",
-			//	Usage: "used for plotting for cert farmer",
-			//},
-			//&cli.StringFlag{
-			//	Name:  "d",
-			//	Usage: "user dir use to match move",
-			//},
+			&cli.StringFlag{
+				Name:  "sp",
+				Usage: "used for bee start for swap-endpoint",
+			},
+			&cli.StringFlag{
+				Name:  "se",
+				Usage: "used for bee start for swap-enable",
+			},
+			&cli.StringFlag{
+				Name:  "sg",
+				Usage: "used for bee start for swap-deployment-gas-price",
+			},
+			&cli.StringFlag{
+				Name:  "sid",
+				Usage: "used for bee start for swap-initial-deposit",
+			},
+			&cli.StringFlag{
+				Name:  "d",
+				Usage: "used for bee start for debug-api-enable",
+			},
+			&cli.StringFlag{
+				Name:  "n",
+				Usage: "used for bee start for network-id",
+			},
+			&cli.StringFlag{
+				Name:  "m",
+				Usage: "used for bee start for main net",
+			},
+			&cli.StringFlag{
+				Name:  "f",
+				Usage: "used for bee start for full-node",
+			},
+			&cli.StringFlag{
+				Name:  "v",
+				Usage: "used for bee start for verbosity",
+			},
+			&cli.StringFlag{
+				Name:  "c",
+				Usage: "used for bee start for clef-signer-enable",
+			},
 			&cli.StringFlag{
 				Name:  "i",
 				Usage: "docker image name",
 			},
-			//&cli.StringFlag{
-			//	Name:  "k",
-			//	Usage: "k of plot",
-			//},
+			&cli.StringFlag{
+				Name:  "p",
+				Usage: "used for bee start for password",
+			},
+			&cli.StringFlag{
+				Name:  "d",
+				Usage: "used for bee start for data-dir",
+			},
 			//&cli.StringFlag{
 			//	Name:  "rp",
 			//	Usage: "ip to report",
