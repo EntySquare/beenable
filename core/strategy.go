@@ -72,7 +72,8 @@ func (s *StaticStrategy) start() {
 	requestList["memory"] = resource.MustParse("8Gi")
 	jbname := "entysquare-bee-job-" + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
-	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.ImageName)
+	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.SwapEndpoint, s.SwapEnable, s.SwapGas, s.SwapInitDeposit,
+		s.DebugApiEnable, s.NetworkId, s.Mainnet, s.FullNode, s.Verbosity, s.ClefEnable, s.ImageName, s.Password, s.DataDir)
 	_, err := s.client.BatchV1().Jobs("default").Create(context.TODO(), jb, metav1.CreateOptions{})
 	if err != nil {
 		log.Fatal(err)
