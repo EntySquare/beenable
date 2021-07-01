@@ -7,7 +7,7 @@ import (
 )
 
 func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32, nodeAffinity corev1.NodeAffinity,
-	limitList corev1.ResourceList, requestList corev1.ResourceList, userDir string,
+	limitList corev1.ResourceList, requestList corev1.ResourceList,
 	imageName string) *batchv1.Job {
 	entySwarmImage := imageName
 
@@ -18,7 +18,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 	zeroBackoffLimitIsRetryTimeForNeverRestartFailedJobPod := int32(3)
 
 	jobLabelMaps := map[string]string{
-		"app":   "enty-swarm",
+		"app":   "enty-bee",
 		"phase": "test",
 	}
 
@@ -48,7 +48,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							Name: "beedatadir",
 							VolumeSource: corev1.VolumeSource{
 								HostPath: &corev1.HostPathVolumeSource{
-									Path: "/root/swarm/" + userDir,
+									Path: "/root/swarm/",
 									Type: &sectorDataDirHostType,
 								},
 							},
@@ -68,15 +68,15 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							//Args: []string{"/entyctl client report -i " + reportIp + " -p " + reportPort + " && /Plotter create -F " +
 							//	farmerKey + " -P " + poolKey + " -d /root/rplots/" + userDir + " -t /root/rplots/" + userDir +
 							//	" -k " + k + " --rp " + reportIp + " --po " + reportPort + " -b 10000"},
-							Args: []string{"/entyctl client -c" + "/root/swarm/" + userDir},
+							Args: []string{"/entyctl client -c" + "/root/swarm/"},
 							Resources: corev1.ResourceRequirements{
 								Limits:   limitList,
 								Requests: requestList,
 							},
 							Env: []corev1.EnvVar{
 								{
-									Name:  "USER_DIR",
-									Value: userDir,
+									Name: "USER_DIR",
+									// Value: userDir,
 								},
 								{
 									Name: "JOB_NODE_NAME",

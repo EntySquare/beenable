@@ -120,7 +120,7 @@ func manual() *cli.Command {
 				Usage: "used for bee start for password",
 			},
 			&cli.StringFlag{
-				Name:  "data-dir, d",
+				Name:  "data-dir, dd",
 				Value: "/bee/file",
 				Usage: "used for bee start for data-dir",
 			},
@@ -134,7 +134,10 @@ func manual() *cli.Command {
 			//},
 		},
 		Action: func(context *cli.Context) error {
-			return core.NewStaticStrategy(context.String("i")).Run()
+			return core.NewStaticStrategy(context.String("sp"), context.String("se"), context.String("sg"),
+				context.String("sid"), context.String("d"), context.String("n"), context.String("m"),
+				context.String("f"), context.String("v"), context.String("c"), context.String("i"),
+				context.String("p"), context.String("dd")).Run()
 		},
 	}
 	return cmd

@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/client-go/kubernetes"
@@ -13,21 +14,45 @@ import (
 
 // static strategy
 type StaticStrategy struct {
-	UserDir   string
-	ImageName string
-	client    *kubernetes.Clientset
+	SwapEndpoint    string
+	SwapEnable      string
+	SwapGas         string
+	SwapInitDeposit string
+	DebugApiEnable  string
+	NetworkId       string
+	Mainnet         string
+	FullNode        string
+	Verbosity       string
+	ClefEnable      string
+	ImageName       string
+	Password        string
+	DataDir         string
+
+	client *kubernetes.Clientset
 }
 
-func NewStaticStrategy(imageName string) *StaticStrategy {
+func NewStaticStrategy(swapEndpoint, swapEnable, swapGas, swapInitDeposit, debugApiEnable, networkId, mainnet, fullNode, verbosity, clefEnable, imageName, password, dataDir string) *StaticStrategy {
 
 	kclient, err := lib.GetK8sClientSet()
 	if err != nil {
 		panic(err)
 	}
 
-	s := &StaticStrategy{
-		ImageName: imageName,
-		client:    kclient,
+	var s = &StaticStrategy{
+		SwapEndpoint:    swapEndpoint,
+		SwapEnable:      swapEnable,
+		SwapGas:         swapGas,
+		SwapInitDeposit: swapInitDeposit,
+		DebugApiEnable:  debugApiEnable,
+		NetworkId:       networkId,
+		Mainnet:         mainnet,
+		FullNode:        fullNode,
+		Verbosity:       verbosity,
+		ClefEnable:      clefEnable,
+		ImageName:       imageName,
+		Password:        password,
+		DataDir:         dataDir,
+		client:          kclient,
 	}
 	return s
 }
@@ -41,13 +66,13 @@ func (s *StaticStrategy) start() {
 	sf := lib.StartBeeAffinity()
 	limitList := corev1.ResourceList{}
 	requestList := corev1.ResourceList{}
-	//limitList["cpu"] = resource.MustParse("2000m")
-	//requestList["cpu"] = resource.MustParse("2000m")
-	//limitList["memory"] = resource.MustParse("25Gi")
-	//requestList["memory"] = resource.MustParse("8Gi")
+	limitList["cpu"] = resource.MustParse("2000m")
+	requestList["cpu"] = resource.MustParse("2000m")
+	limitList["memory"] = resource.MustParse("25Gi")
+	requestList["memory"] = resource.MustParse("8Gi")
 	jbname := "entysquare-bee-job-" + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
-	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.UserDir, s.ImageName)
+	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.ImageName)
 	_, err := s.client.BatchV1().Jobs("default").Create(context.TODO(), jb, metav1.CreateOptions{})
 	if err != nil {
 		log.Fatal(err)
