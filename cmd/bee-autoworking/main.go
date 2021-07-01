@@ -63,43 +63,52 @@ func manual() *cli.Command {
 		Usage: "starting bee based on manual options",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:  "sp",
+				Name:  "swap-endpoint, sp",
 				Usage: "used for bee start for swap-endpoint",
 			},
 			&cli.StringFlag{
-				Name:  "se",
+				Name:  "swap-enable, se",
+				Value: "true",
 				Usage: "used for bee start for swap-enable",
 			},
 			&cli.StringFlag{
-				Name:  "sg",
+				Name:  "swap-deployment-gas-price, sg",
+				Value: "1000000000000",
 				Usage: "used for bee start for swap-deployment-gas-price",
 			},
 			&cli.StringFlag{
-				Name:  "sid",
+				Name:  "swap-initial-deposit, sid",
+				Value: "0",
 				Usage: "used for bee start for swap-initial-deposit",
 			},
 			&cli.StringFlag{
-				Name:  "d",
+				Name:  "debug-api-enable, d",
+				Value: "true",
 				Usage: "used for bee start for debug-api-enable",
 			},
 			&cli.StringFlag{
-				Name:  "n",
+				Name:  "network-id, n",
+				Value: "1",
 				Usage: "used for bee start for network-id",
 			},
 			&cli.StringFlag{
-				Name:  "m",
+				Name:  "main-net, m",
+				Value: "true",
 				Usage: "used for bee start for main net",
 			},
 			&cli.StringFlag{
-				Name:  "f",
+				Name:  "full-node, f",
+				Value: "true",
 				Usage: "used for bee start for full-node",
 			},
 			&cli.StringFlag{
-				Name:  "v",
-				Usage: "used for bee start for verbosity",
+				Name:  "verbosity, v",
+				Value: "info",
+				Usage: "used for bee start for log verbosity",
 			},
 			&cli.StringFlag{
-				Name:  "c",
+				Name:  "clef-signer-enable, c",
+				Value: "false",
 				Usage: "used for bee start for clef-signer-enable",
 			},
 			&cli.StringFlag{
@@ -107,11 +116,12 @@ func manual() *cli.Command {
 				Usage: "docker image name",
 			},
 			&cli.StringFlag{
-				Name:  "p",
+				Name:  "password, p",
 				Usage: "used for bee start for password",
 			},
 			&cli.StringFlag{
-				Name:  "d",
+				Name:  "data-dir, d",
+				Value: "/bee/file",
 				Usage: "used for bee start for data-dir",
 			},
 			//&cli.StringFlag{
