@@ -45,7 +45,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 					RestartPolicy: jobRestartPolicy,
 					Volumes: []corev1.Volume{
 						{
-							Name: "beeDataDir",
+							Name: "bee-datadir",
 							VolumeSource: corev1.VolumeSource{
 								HostPath: &corev1.HostPathVolumeSource{
 									Path: "/root/swarm/test/bee/.bee-docker",
@@ -60,7 +60,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							Image: entyBeeImage,
 							VolumeMounts: []corev1.VolumeMount{
 								{
-									Name:      "beeDataDir",
+									Name:      "bee-datadir",
 									MountPath: "/bee/file",
 								},
 							},
