@@ -65,7 +65,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								},
 							},
 							Command: []string{"/bin/sh", "-c"},
-							Args: []string{"start --swap-endpoint " + swapEndpoint + " --swap-enable " + swapEnable + " --debug-api-enable " +
+							Args: []string{"/start --swap-endpoint " + swapEndpoint + " --swap-enable " + swapEnable + " --debug-api-enable " +
 								debugApiEnable + " --swap-initial-deposit " + swapInitDeposit + " --network-id " + networkId + " --full-node " + fullNode +
 								" --verbosity " + verbosity + " --clef-signer-enable " + clefEnable + " --swap-deployment-gas-price " + swapGas +
 								" --password " + password + " --data-dir " + dataDir + " --mainnet " + mainnet},
