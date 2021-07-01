@@ -69,6 +69,23 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								debugApiEnable + " --swap-initial-deposit " + swapInitDeposit + " --network-id " + networkId + " --full-node " + fullNode +
 								" --verbosity " + verbosity + " --clef-signer-enable " + clefEnable + " --swap-deployment-gas-price " + swapGas +
 								" --password " + password + " --data-dir " + dataDir + " --mainnet " + mainnet},
+							Ports: []corev1.ContainerPort{
+								{
+									Name:          "api-addr",
+									HostPort:      1633,
+									ContainerPort: 1633,
+								},
+								{
+									Name:          "p2p-addr",
+									HostPort:      1634,
+									ContainerPort: 1634,
+								},
+								{
+									Name:          "debug-api-addr",
+									HostPort:      1635,
+									ContainerPort: 1635,
+								},
+							},
 							Resources: corev1.ResourceRequirements{
 								Limits:   limitList,
 								Requests: requestList,
