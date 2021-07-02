@@ -1,10 +1,11 @@
 FROM golang:1.15 AS build
 ENV GOPROXY "https://goproxy.cn"
+USER root
 WORKDIR /src
 # enable modules caching in separate layer
 COPY go.mod go.sum ./
 RUN go mod download
-COPY . ./
+COPY ./eth-bee/. ./
 
 RUN make binary
 
@@ -25,7 +26,7 @@ RUN mkdir -p /home/bee/.bee && chown 999:999 /home/bee/.bee
 COPY --from=build /src/dist/bee /usr/local/bin/bee
 
 EXPOSE 1633 1634 1635
-USER bee
+
 WORKDIR /home/bee
 VOLUME /home/bee/.bee
 
