@@ -21,5 +21,6 @@ func GenerateRangeNum(min, max int) int {
 	randNum := rand.Intn(max - min)
 	randNum = randNum + min
 	fmt.Printf("rand is %v\n", randNum)
+	fmt.Printf("rand is %v\n", int32(randNum))
 	return randNum
 }

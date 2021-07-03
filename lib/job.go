@@ -75,17 +75,17 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "api-addr",
-									HostPort:      1633,
+									HostPort:      int32(port1),
 									ContainerPort: 1633,
 								},
 								{
 									Name:          "p2p-addr",
-									HostPort:      1634,
+									HostPort:      int32(port2),
 									ContainerPort: 1634,
 								},
 								{
 									Name:          "debug-api-addr",
-									HostPort:      1635,
+									HostPort:      int32(port3),
 									ContainerPort: 1635,
 								},
 							},
