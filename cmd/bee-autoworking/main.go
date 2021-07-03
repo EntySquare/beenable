@@ -137,14 +137,24 @@ func manual() *cli.Command {
 				Value:   "/bee/file",
 				Usage:   "used for bee start for data-dir",
 			},
-			//&cli.StringFlag{
-			//	Name:  "rp",
-			//	Usage: "ip to report",
-			//},
-			//&cli.StringFlag{
-			//	Name:  "po",
-			//	Usage: "port to report",
-			//},
+			&cli.StringFlag{
+				Name:    "api-addr",
+				Aliases: []string{"ap"},
+				Value:   "1633",
+				Usage:   "HTTP API listen address port",
+			},
+			&cli.StringFlag{
+				Name:    "p2p-addr",
+				Aliases: []string{"pp"},
+				Value:   "1634",
+				Usage:   "P2P listen address port",
+			},
+			&cli.StringFlag{
+				Name:    "debug-api-addr",
+				Aliases: []string{"dp"},
+				Value:   "1635",
+				Usage:   "debug HTTP API listen address port",
+			},
 		},
 		Action: func(context *cli.Context) error {
 			return core.NewStaticStrategy(context.String("sp"), context.String("se"), context.String("sg"),

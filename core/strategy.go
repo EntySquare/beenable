@@ -10,6 +10,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/client-go/kubernetes"
 	"log"
+	"time"
 )
 
 // static strategy
@@ -72,8 +73,12 @@ func (s *StaticStrategy) start() {
 	requestList["memory"] = resource.MustParse("8Gi")
 	jbname := "entysquare-bee-job-" + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
+	// random port
+	port1 := GenerateRangeNum(10001, 20000)
+	port2 := port1 + 1
+	port3 := port2 + 1
 	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.SwapEndpoint, s.SwapEnable, s.SwapGas, s.SwapInitDeposit,
-		s.DebugApiEnable, s.NetworkId, s.Mainnet, s.FullNode, s.Verbosity, s.ClefEnable, s.ImageName, s.Password, s.DataDir)
+		s.DebugApiEnable, s.NetworkId, s.Mainnet, s.FullNode, s.Verbosity, s.ClefEnable, s.ImageName, s.Password, s.DataDir, port1, port2, port3)
 	_, err := s.client.BatchV1().Jobs("default").Create(context.TODO(), jb, metav1.CreateOptions{})
 	if err != nil {
 		log.Fatal(err)
@@ -92,21 +97,10 @@ func (s *DynamicStrategy) Run() error {
 	return nil
 }
 
-//func (s *StaticStrategy) testPlot() {
-//	sf := lib.StartTestAffinity()
-//	limitList := corev1.ResourceList{}
-//	requestList := corev1.ResourceList{}
-//	limitList["cpu"] = resource.MustParse("2000m")
-//	requestList["cpu"] = resource.MustParse("2000m")
-//	limitList["memory"] = resource.MustParse("25Gi")
-//	requestList["memory"] = resource.MustParse("8Gi")
-//	farmer := s.FarmerKey[:8]
-//	jbname := "entysquare-k-" + s.K + "-job-plot-farmer-" + farmer + "-" + rand.String(5)
-//	fmt.Println("run job : " + jbname)
-//	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.FarmerKey,
-//		s.PoolKey, s.UserDir, s.ImageName, s.K, s.ReportIp, s.ReportPort)
-//	_, err := s.client.BatchV1().Jobs("default").Create(context.TODO(), jb, metav1.CreateOptions{})
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//}
+func GenerateRangeNum(min, max int) int {
+	rand.Seed(time.Now().Unix())
+	randNum := rand.Intn(max - min)
+	randNum = randNum + min
+	fmt.Printf("rand is %v\n", randNum)
+	return randNum
+}
