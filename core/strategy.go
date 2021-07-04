@@ -128,23 +128,3 @@ func GenerateRangeNum(min, max int) int {
 	fmt.Printf("rand is %v\n", randNum)
 	return randNum
 }
-
-//func httpGetBeeKey() *BeeKey {
-//	resp, err := http.Get("http://10.1.66.146")
-//	if err != nil {
-//		fmt.Println(err)
-//		return nil
-//	}
-//	defer resp.Body.Close()
-//	body, err := ioutil.ReadAll(resp.Body)
-//	if err != nil {
-//		fmt.Println(err)
-//		return nil
-//	}
-//	var keyData BeeKey
-//	if err := json.Unmarshal(body, &keyData); err != nil {
-//		fmt.Println(err)
-//		return nil
-//	}
-//	return keyData
-//}
