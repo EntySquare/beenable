@@ -67,10 +67,10 @@ func (s *StaticStrategy) start() {
 	sf := lib.StartBeeAffinity()
 	limitList := corev1.ResourceList{}
 	requestList := corev1.ResourceList{}
-	limitList["cpu"] = resource.MustParse("2000m")
-	requestList["cpu"] = resource.MustParse("2000m")
-	limitList["memory"] = resource.MustParse("25Gi")
-	requestList["memory"] = resource.MustParse("8Gi")
+	limitList["cpu"] = resource.MustParse("10%")
+	requestList["cpu"] = resource.MustParse("10%")
+	limitList["memory"] = resource.MustParse("1Gi")
+	requestList["memory"] = resource.MustParse("200m")
 	jbname := "entysquare-bee-job-" + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
 	// random port
