@@ -11,8 +11,7 @@ import (
 func main() {
 
 	manualStartingCMD := manual()
-	checkStartingCMD := check()
-	restartingCMD := restart()
+	//restartingCMD := restart()
 
 	app := &cli.App{
 		Flags: []cli.Flag{
@@ -28,16 +27,11 @@ func main() {
 				Usage:       "bee manual start",
 				Subcommands: []*cli.Command{manualStartingCMD},
 			},
-			{
-				Name:        "check",
-				Usage:       "check unused bee address",
-				Subcommands: []*cli.Command{checkStartingCMD},
-			},
-			{
-				Name:        "restart",
-				Usage:       "bee restart",
-				Subcommands: []*cli.Command{restartingCMD},
-			},
+			//{
+			//	Name:        "restart",
+			//	Usage:       "bee restart",
+			//	Subcommands: []*cli.Command{restartingCMD},
+			//},
 		},
 	}
 
@@ -159,10 +153,6 @@ func manual() *cli.Command {
 	return cmd
 }
 
-func check() *cli.Command {
-
-}
-
-func restart() *cli.Command {
-
-}
+//func restart() *cli.Command {
+//
+//}
