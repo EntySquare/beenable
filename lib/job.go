@@ -9,7 +9,7 @@ import (
 
 func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32, nodeAffinity corev1.NodeAffinity,
 	limitList corev1.ResourceList, requestList corev1.ResourceList, swapEndpoint, swapEnable, swapGas, swapInitDeposit,
-	debugApiEnable, networkId, mainnet, fullNode, verbosity, clefEnable, imageName, password, dataDir, addr string,
+	debugApiEnable, networkId, mainnet, fullNode, verbosity, clefEnable, imageName, password, dataDir string,
 	port1, port2, port3 int) *batchv1.Job {
 	entyBeeImage := imageName
 
@@ -50,7 +50,16 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							Name: "bee-datadir",
 							VolumeSource: corev1.VolumeSource{
 								HostPath: &corev1.HostPathVolumeSource{
-									Path: "/root/swarm/bee/bee-docker/file/" + addr,
+									Path: "/root/swarm/bee/bee-docker/file/",
+									Type: &sectorDataDirHostType,
+								},
+							},
+						},
+						{
+							Name: "bee-kubernets",
+							VolumeSource: corev1.VolumeSource{
+								HostPath: &corev1.HostPathVolumeSource{
+									Path: "/root/.kube/config",
 									Type: &sectorDataDirHostType,
 								},
 							},
@@ -63,16 +72,19 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							VolumeMounts: []corev1.VolumeMount{
 								{
 									Name:      "bee-datadir",
-									MountPath: "/home/bee/bee/file/" + addr,
+									MountPath: "/home/bee/bee/file/",
+								},
+								{
+									Name:      "bee-kubernets",
+									MountPath: "/root/.kube/config",
 								},
 							},
 							Command: []string{"/bin/sh", "-c"},
-							Args: []string{"wget -P /home/bee/bee/file/" + addr + "http://10.1.66.146:8010/getAddressFile/" + addr +
-								".tar.gz && tar zxvf " + addr + ".tar.gz && bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
+							Args: []string{"./label && bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
 								debugApiEnable + " --swap-initial-deposit=" + swapInitDeposit + " --network-id=" + networkId + " --full-node=" + fullNode +
 								" --verbosity=" + verbosity + " --clef-signer-enable=" + clefEnable + " --swap-deployment-gas-price " + swapGas +
-								" --password=" + password + " --data-dir=" + dataDir + "/" + addr + " --mainnet=" + mainnet + " --api-addr=" + strconv.Itoa(port1) +
-								" --p2p-addr=" + strconv.Itoa(port2) + " --debug-api-addr=" + strconv.Itoa(port3) + "&& sleep 5s && ./label"},
+								" --password=" + password + " --data-dir=" + dataDir + "/$BEE_ADDRESS" + " --mainnet=" + mainnet + " --api-addr=" + strconv.Itoa(port1) +
+								" --p2p-addr=" + strconv.Itoa(port2) + " --debug-api-addr=" + strconv.Itoa(port3)},
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "api-addr",
