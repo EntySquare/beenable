@@ -80,7 +80,8 @@ func (s *StaticStrategy) start() {
 	limitList["memory"] = resource.MustParse("1Gi")
 	requestList["memory"] = resource.MustParse("200m")
 	// require bee wallet address
-	addr := getBeeKey("http://192.168.2.12/getAddressName")
+	//addr := getBeeKey("http://192.168.2.12/getAddressName")
+	addr := getBeeKey("http://10.1.66.146:8010/getAddressName")
 	//labelKey := key[0:10]
 	jbname := "entysquare-bee-job-" + addr + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
