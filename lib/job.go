@@ -9,7 +9,7 @@ import (
 
 func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32, nodeAffinity corev1.NodeAffinity,
 	limitList corev1.ResourceList, requestList corev1.ResourceList, swapEndpoint, swapEnable, swapGas, swapInitDeposit,
-	debugApiEnable, networkId, mainnet, fullNode, verbosity, clefEnable, imageName, password, dataDir string,
+	debugApiEnable, networkId, mainnet, fullNode, verbosity, clefEnable, imageName, password, dataDir, key string,
 	port1, port2, port3 int) *batchv1.Job {
 	entyBeeImage := imageName
 
@@ -17,7 +17,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 	jobRestartPolicy := corev1.RestartPolicyNever
 
 	//Dont Restart a failed job pod!!!
-	zeroBackoffLimitIsRetryTimeForNeverRestartFailedJobPod := int32(3)
+	zeroBackoffLimitIsRetryTimeForNeverRestartFailedJobPod := int32(0)
 
 	jobLabelMaps := map[string]string{
 		"app":   "enty-bee",

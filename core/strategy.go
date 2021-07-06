@@ -2,14 +2,18 @@ package core
 
 import (
 	"beenable/lib"
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/client-go/kubernetes"
 	"log"
+	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -72,38 +76,45 @@ func (s *StaticStrategy) start() {
 	sf := lib.StartBeeAffinity()
 	limitList := corev1.ResourceList{}
 	requestList := corev1.ResourceList{}
-	limitList["cpu"] = resource.MustParse("10%")
-	requestList["cpu"] = resource.MustParse("10%")
+	//limitList["cpu"] = resource.MustParse("10%")
+	//requestList["cpu"] = resource.MustParse("10%")
 	limitList["memory"] = resource.MustParse("1Gi")
 	requestList["memory"] = resource.MustParse("200m")
-	jbname := "entysquare-bee-job-" + "-" + rand.String(10)
+	// require bee wallet address
+	key := getBeeKey("http://192.168.2.12/getAddressName")
+	labelKey := key[0:10]
+	jbname := "entysquare-bee-job-" + labelKey + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
 	// random port
-	port1 := GenerateRangeNum(10001, 20000)
+	port1 := generateRangeNum(10001, 20000)
 	port2 := port1 + 1
 	port3 := port2 + 1
 	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.SwapEndpoint, s.SwapEnable, s.SwapGas, s.SwapInitDeposit,
-		s.DebugApiEnable, s.NetworkId, s.Mainnet, s.FullNode, s.Verbosity, s.ClefEnable, s.ImageName, s.Password, s.DataDir, port1, port2, port3)
+		s.DebugApiEnable, s.NetworkId, s.Mainnet, s.FullNode, s.Verbosity, s.ClefEnable, s.ImageName, s.Password, s.DataDir, key, port1, port2, port3)
 	_, err := s.client.BatchV1().Jobs("default").Create(context.TODO(), jb, metav1.CreateOptions{})
-	pods, err := s.client.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{})
+
 	if err != nil {
-		fmt.Print("get pod error", err)
+		fmt.Print("create job error", err)
+		return
 	}
 	var podLabelMap = make(map[string]string)
 	var nodeLabelMap = make(map[string]string)
 
-	podLabelMap["entysquare-bee-job"] = "key"
-	for _, p := range pods.Items {
-		if strings.Contains(p.Name, "entysquare-bee-job") {
-			p.SetLabels(podLabelMap)
-			node, err := s.client.CoreV1().Nodes().Get(context.TODO(), p.Spec.NodeName, metav1.GetOptions{})
-			if err != nil {
-				fmt.Print("get node error", err)
-			}
-			node.SetLabels(nodeLabelMap)
-		}
+	podName := os.Getenv("JOB_POD_NAME")
+	pods, err := s.client.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
+	if err != nil {
+		fmt.Print("get pod error", err)
 	}
-
+	podLabelMap[labelKey] = "key"
+	if strings.Contains(podName, labelKey) {
+		pods.SetLabels(podLabelMap)
+		node, err := s.client.CoreV1().Nodes().Get(context.TODO(), pods.Spec.NodeName, metav1.GetOptions{})
+		if err != nil {
+			fmt.Print("get node error", err)
+		}
+		nodeLabelMap[labelKey] = "key"
+		node.SetLabels(nodeLabelMap)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -121,10 +132,32 @@ func (s *DynamicStrategy) Run() error {
 	return nil
 }
 
-func GenerateRangeNum(min, max int) int {
+func generateRangeNum(min, max int) int {
 	rand.Seed(time.Now().Unix())
 	randNum := rand.Intn(max - min)
 	randNum = randNum + min
 	fmt.Printf("rand is %v\n", randNum)
 	return randNum
+}
+
+func getBeeKey(url string) string {
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Get(url)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	var buffer [512]byte
+	result := bytes.NewBuffer(nil)
+	for {
+		n, err := resp.Body.Read(buffer[0:])
+		result.Write(buffer[0:n])
+		if err != nil && err == io.EOF {
+			break
+		} else if err != nil {
+			panic(err)
+		}
+	}
+	return result.String()
 }
