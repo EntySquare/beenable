@@ -1,6 +1,18 @@
-FROM golang:1.15 AS build
+FROM golang:1.15 AS build1
 ENV GOPROXY "https://goproxy.cn"
 USER root
+WORKDIR /root
+COPY go.mod go.sum ./
+RUN go mod download
+ADD . ./
+
+WORKDIR /root/cmd/label
+RUN go build -o label .
+
+FROM golang:1.15 AS build2
+ENV GOPROXY "https://goproxy.cn"
+USER root
+
 WORKDIR /src
 # enable modules caching in separate layer
 COPY go.mod go.sum ./
@@ -23,11 +35,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # make sure mounted volumes have correct permissions
 RUN mkdir -p /home/bee/.bee && chown 999:999 /home/bee/.bee
 
-COPY --from=build /src/dist/bee /usr/local/bin/bee
+COPY --from=build2 /src/dist/bee /usr/local/bin/bee
+COPY --from=build1 /root/cmd/label /usr/local/bin/label
 
 EXPOSE 1633 1634 1635
 
 WORKDIR /home/bee
 VOLUME /home/bee/.bee
-
-ENTRYPOINT ["bee"]
