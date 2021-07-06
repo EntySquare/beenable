@@ -83,7 +83,7 @@ func (s *StaticStrategy) start() {
 	//addr := getBeeKey("http://192.168.2.12/getAddressName")
 	addr := getBeeKey("http://10.1.66.146:8010/getAddressName")
 	//labelKey := key[0:10]
-	jbname := "entysquare-bee-job-" + addr + "-" + rand.String(10)
+	jbname := "enty-bee-job-" + addr
 	fmt.Println("run job : " + jbname)
 	// random port
 	port1 := generateRangeNum(10001, 20000)
