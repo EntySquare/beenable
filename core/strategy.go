@@ -81,16 +81,16 @@ func (s *StaticStrategy) start() {
 	limitList["memory"] = resource.MustParse("1Gi")
 	requestList["memory"] = resource.MustParse("200m")
 	// require bee wallet address
-	key := getBeeKey("http://192.168.2.12/getAddressName")
-	labelKey := key[0:10]
-	jbname := "entysquare-bee-job-" + labelKey + "-" + rand.String(10)
+	addr := getBeeKey("http://192.168.2.12/getAddressName")
+	//labelKey := key[0:10]
+	jbname := "entysquare-bee-job-" + addr + "-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
 	// random port
 	port1 := generateRangeNum(10001, 20000)
 	port2 := port1 + 1
 	port3 := port2 + 1
 	jb := lib.GetJob(jbname, 1, 10000, sf, limitList, requestList, s.SwapEndpoint, s.SwapEnable, s.SwapGas, s.SwapInitDeposit,
-		s.DebugApiEnable, s.NetworkId, s.Mainnet, s.FullNode, s.Verbosity, s.ClefEnable, s.ImageName, s.Password, s.DataDir, key, port1, port2, port3)
+		s.DebugApiEnable, s.NetworkId, s.Mainnet, s.FullNode, s.Verbosity, s.ClefEnable, s.ImageName, s.Password, s.DataDir, addr, port1, port2, port3)
 	_, err := s.client.BatchV1().Jobs("default").Create(context.TODO(), jb, metav1.CreateOptions{})
 
 	if err != nil {
@@ -105,14 +105,14 @@ func (s *StaticStrategy) start() {
 	if err != nil {
 		fmt.Print("get pod error", err)
 	}
-	podLabelMap[labelKey] = "key"
-	if strings.Contains(podName, labelKey) {
+	podLabelMap[addr] = "address"
+	if strings.Contains(podName, addr) {
 		pods.SetLabels(podLabelMap)
 		node, err := s.client.CoreV1().Nodes().Get(context.TODO(), pods.Spec.NodeName, metav1.GetOptions{})
 		if err != nil {
 			fmt.Print("get node error", err)
 		}
-		nodeLabelMap[labelKey] = "key"
+		nodeLabelMap[addr] = "address"
 		node.SetLabels(nodeLabelMap)
 	}
 	if err != nil {

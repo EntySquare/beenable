@@ -11,7 +11,8 @@ import (
 func main() {
 
 	manualStartingCMD := manual()
-	autoStartingCMD := auto()
+	checkStartingCMD := check()
+	restartingCMD := restart()
 
 	app := &cli.App{
 		Flags: []cli.Flag{
@@ -23,14 +24,19 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:        "manual",
-				Usage:       "manual start",
+				Name:        "start",
+				Usage:       "bee manual start",
 				Subcommands: []*cli.Command{manualStartingCMD},
 			},
 			{
-				Name:        "auto",
-				Usage:       "automatic start",
-				Subcommands: []*cli.Command{autoStartingCMD},
+				Name:        "check",
+				Usage:       "check unused bee address",
+				Subcommands: []*cli.Command{checkStartingCMD},
+			},
+			{
+				Name:        "restart",
+				Usage:       "bee restart",
+				Subcommands: []*cli.Command{restartingCMD},
 			},
 		},
 	}
@@ -42,19 +48,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func auto() *cli.Command {
-	cmd := &cli.Command{
-		Name:  "bee",
-		Usage: "starting bee based on manual options",
-		Flags: []cli.Flag{},
-		Action: func(context *cli.Context) error {
-			return core.NewDynamicStrategy().Run()
-		},
-	}
-	return cmd
-
 }
 
 func manual() *cli.Command {
@@ -164,4 +157,12 @@ func manual() *cli.Command {
 		},
 	}
 	return cmd
+}
+
+func check() *cli.Command {
+
+}
+
+func restart() *cli.Command {
+
 }
