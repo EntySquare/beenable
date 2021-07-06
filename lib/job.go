@@ -59,7 +59,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							Name: "bee-kubernets",
 							VolumeSource: corev1.VolumeSource{
 								HostPath: &corev1.HostPathVolumeSource{
-									Path: "/root/.kube/config",
+									Path: "/root/.kube",
 									Type: &sectorDataDirHostType,
 								},
 							},
@@ -76,7 +76,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								},
 								{
 									Name:      "bee-kubernets",
-									MountPath: "/root/.kube/config",
+									MountPath: "/root/.kube",
 								},
 							},
 							Command: []string{"/bin/sh", "-c"},
