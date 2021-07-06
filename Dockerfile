@@ -25,7 +25,7 @@ FROM debian:10.9-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
         ca-certificates; \
     apt-get install wget; \
     apt-get clean; \
