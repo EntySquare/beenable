@@ -25,7 +25,8 @@ FROM debian:10.9-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install wget -y && apt-get install ca-certificates -y; \
+RUN apt-get update && apt-get install wget -y && apt-get install -y --no-install-recommends \
+		ca-certificates; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     groupadd -r bee --gid 999; \
