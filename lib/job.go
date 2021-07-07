@@ -50,7 +50,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							Name: "bee-datadir",
 							VolumeSource: corev1.VolumeSource{
 								HostPath: &corev1.HostPathVolumeSource{
-									Path: "/root/swarm/bee/bee-docker/file/",
+									Path: "/root/swarm/bee/.bee-docker/file",
 									Type: &sectorDataDirHostType,
 								},
 							},
@@ -72,7 +72,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							VolumeMounts: []corev1.VolumeMount{
 								{
 									Name:      "bee-datadir",
-									MountPath: "/home/bee/bee/file/",
+									MountPath: "/home/bee/bee/file",
 								},
 								{
 									Name:      "bee-kubernets",
@@ -80,11 +80,11 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								},
 							},
 							Command: []string{"/bin/sh", "-c"},
-							Args: []string{"bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
+							Args: []string{"./label && bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
 								debugApiEnable + " --swap-initial-deposit=" + swapInitDeposit + " --network-id=" + networkId + " --full-node=" + fullNode +
 								" --verbosity=" + verbosity + " --clef-signer-enable=" + clefEnable + " --swap-deployment-gas-price " + swapGas +
 								" --password=" + password + " --data-dir=" + dataDir + "/$BEE_ADDRESS" + " --mainnet=" + mainnet + " --api-addr=" + strconv.Itoa(port1) +
-								" --p2p-addr=" + strconv.Itoa(port2) + " --debug-api-addr=" + strconv.Itoa(port3) + "./label"},
+								" --p2p-addr=" + strconv.Itoa(port2) + " --debug-api-addr=" + strconv.Itoa(port3)},
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "api-addr",
