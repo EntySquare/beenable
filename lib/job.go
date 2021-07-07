@@ -80,10 +80,10 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								},
 							},
 							Command: []string{"/bin/sh", "-c"},
-							Args: []string{"label && bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
+							Args: []string{"bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
 								debugApiEnable + " --swap-initial-deposit=" + swapInitDeposit + " --network-id=" + networkId + " --full-node=" + fullNode +
 								" --verbosity=" + verbosity + " --clef-signer-enable=" + clefEnable + " --swap-deployment-gas-price " + swapGas +
-								" --password=" + password + " --data-dir=" + dataDir + "/$BEE_ADDRESS" + " --mainnet=" + mainnet + " --api-addr=" + strconv.Itoa(port1) +
+								" --password=" + password + " --data-dir=" + dataDir + " --mainnet=" + mainnet + " --api-addr=" + strconv.Itoa(port1) +
 								" --p2p-addr=" + strconv.Itoa(port2) + " --debug-api-addr=" + strconv.Itoa(port3)},
 							Ports: []corev1.ContainerPort{
 								{
