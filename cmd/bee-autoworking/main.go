@@ -23,15 +23,10 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:        "start",
+				Name:        "manual",
 				Usage:       "bee manual start",
 				Subcommands: []*cli.Command{manualStartingCMD},
 			},
-			//{
-			//	Name:        "restart",
-			//	Usage:       "bee restart",
-			//	Subcommands: []*cli.Command{restartingCMD},
-			//},
 		},
 	}
 
@@ -152,7 +147,3 @@ func manual() *cli.Command {
 	}
 	return cmd
 }
-
-//func restart() *cli.Command {
-//
-//}

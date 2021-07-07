@@ -76,7 +76,6 @@ func (s *StaticStrategy) start() {
 	limitList["memory"] = resource.MustParse("500m")
 	requestList["memory"] = resource.MustParse("200m")
 
-	//labelKey := key[0:10]
 	jbname := "enty-bee-job-" + rand.String(10)
 	fmt.Println("run job : " + jbname)
 	// random port
@@ -89,11 +88,6 @@ func (s *StaticStrategy) start() {
 	if err != nil {
 		log.Fatal("create job error", err)
 	}
-}
-
-func (s *StaticStrategy) Restart() error {
-	s.start()
-	return nil
 }
 
 func generateRangeNum(min, max int) int {
