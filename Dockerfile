@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install wget -y && apt-get install -y --no-install
 RUN mkdir -p /home/bee/.bee && chown 999:999 /home/bee/.bee
 
 COPY --from=build2 /src/dist/bee /usr/local/bin/bee
-COPY --from=build1 /root/cmd/label /usr/local/bin/label
+COPY --from=build1 /root/cmd/label /usr/local/bin
 
 EXPOSE 1633 1634 1635
 
