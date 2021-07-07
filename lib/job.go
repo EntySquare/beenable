@@ -55,15 +55,15 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								},
 							},
 						},
-						{
-							Name: "bee-kubernets",
-							VolumeSource: corev1.VolumeSource{
-								HostPath: &corev1.HostPathVolumeSource{
-									Path: "/root/.kube",
-									Type: &sectorDataDirHostType,
-								},
-							},
-						},
+						//{
+						//	Name: "bee-kubernets",
+						//	VolumeSource: corev1.VolumeSource{
+						//		HostPath: &corev1.HostPathVolumeSource{
+						//			Path: "/root/.kube",
+						//			Type: &sectorDataDirHostType,
+						//		},
+						//	},
+						//},
 					},
 					Containers: []corev1.Container{
 						{
@@ -74,10 +74,10 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 									Name:      "bee-datadir",
 									MountPath: "/home/bee/bee/file",
 								},
-								{
-									Name:      "bee-kubernets",
-									MountPath: "/root/.kube",
-								},
+								//{
+								//	Name:      "bee-kubernets",
+								//	MountPath: "/root/.kube",
+								//},
 							},
 							Command: []string{"/bin/sh", "-c"},
 							Args: []string{"bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
