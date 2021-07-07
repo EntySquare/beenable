@@ -73,7 +73,7 @@ func (s *StaticStrategy) start() {
 	requestList := corev1.ResourceList{}
 	//limitList["cpu"] = resource.MustParse("10%")
 	//requestList["cpu"] = resource.MustParse("10%")
-	limitList["memory"] = resource.MustParse("500m")
+	limitList["memory"] = resource.MustParse("1Gi")
 	requestList["memory"] = resource.MustParse("200m")
 
 	jbname := "enty-bee-job-" + rand.String(10)
