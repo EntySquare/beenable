@@ -23,12 +23,6 @@ func main() {
 	podName := os.Getenv("JOB_POD_NAME")
 	nodeName := os.Getenv("JOB_NODE_NAME")
 
-	pod, err := kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
-	if err != nil {
-		fmt.Print("get pod error", err)
-	}
-	fmt.Printf("get pod success\n")
-
 	node, err := kclient.CoreV1().Nodes().Get(context.TODO(), nodeName, metav1.GetOptions{})
 	if err != nil {
 		fmt.Print("get node error", err)
@@ -38,6 +32,11 @@ func main() {
 	addr := getUnLabelPod(node, kclient)
 	if addr != "" {
 		_ = os.Setenv("BEE_ADDRESS", addr)
+		pod, err := kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
+		if err != nil {
+			fmt.Print("get pod error", err)
+		}
+		fmt.Printf("get pod success\n")
 		pod.ObjectMeta.Labels[addr] = "addr"
 		time.Sleep(time.Second * 5)
 		for i := 0; i < 3; i++ {
@@ -63,6 +62,11 @@ func main() {
 			panic(err)
 		}
 		fmt.Printf("get addr success,%v\n", httpAddr)
+		pod, err := kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
+		if err != nil {
+			fmt.Print("get pod error", err)
+		}
+		fmt.Printf("get pod success\n")
 		pod.ObjectMeta.Labels[httpAddr] = "addr"
 		time.Sleep(time.Second * 5)
 		for i := 0; i < 3; i++ {
@@ -78,7 +82,12 @@ func main() {
 		node.ObjectMeta.Labels[httpAddr] = "addr"
 		time.Sleep(time.Second * 5)
 		for i := 0; i < 3; i++ {
-			_, err := kclient.CoreV1().Nodes().Update(context.TODO(), node, metav1.UpdateOptions{})
+			node, err := kclient.CoreV1().Nodes().Get(context.TODO(), nodeName, metav1.GetOptions{})
+			if err != nil {
+				fmt.Print("get node error", err)
+			}
+			fmt.Printf("get node success\n")
+			_, err = kclient.CoreV1().Nodes().Update(context.TODO(), node, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update node with new label err:%v=addr , %v\n", httpAddr, err)
 				time.Sleep(time.Second * 5)
