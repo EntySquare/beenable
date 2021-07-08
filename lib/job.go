@@ -60,15 +60,6 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								},
 							},
 						},
-						{
-							Name: "etc-profile",
-							VolumeSource: corev1.VolumeSource{
-								HostPath: &corev1.HostPathVolumeSource{
-									Path: "/etc/profile",
-									Type: &sectorDataDirHostType,
-								},
-							},
-						},
 					},
 					Containers: []corev1.Container{
 						{
@@ -79,10 +70,6 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								{
 									Name:      "bee-datadir",
 									MountPath: "/home/bee/bee/file",
-								},
-								{
-									Name:      "etc-profile",
-									MountPath: "/etc/profile",
 								},
 							},
 
