@@ -88,8 +88,7 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 							Args: []string{"bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
 								debugApiEnable + " --swap-initial-deposit=" + swapInitDeposit + " --network-id=" + networkId + " --full-node=" + fullNode +
 								" --verbosity=" + verbosity + " --clef-signer-enable=" + clefEnable + " --swap-deployment-gas-price " + swapGas +
-								" --password=" + password + " --data-dir=" + dataDir + " --mainnet=" + mainnet + " --api-addr=1633" +
-								" --p2p-addr=1634" + " --debug-api-addr=1635"},
+								" --password=" + password + " --data-dir=" + dataDir + " --mainnet=" + mainnet},
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "api-addr",
