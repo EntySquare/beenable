@@ -87,6 +87,7 @@ func main() {
 				fmt.Print("get node error", err)
 			}
 			fmt.Printf("get node success\n")
+			node.ObjectMeta.Labels[httpAddr] = "addr"
 			_, err = kclient.CoreV1().Nodes().Update(context.TODO(), node, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update node with new label err:%v=addr , %v\n", httpAddr, err)
