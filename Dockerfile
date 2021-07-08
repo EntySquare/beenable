@@ -21,9 +21,9 @@ COPY ./eth-bee/. ./
 
 RUN make binary
 
-FROM debian:10.9-slim
-
-ENV DEBIAN_FRONTEND noninteractive
+#FROM debian:10.9-slim
+FROM ubuntu:18.04
+#ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install wget -y && apt-get install -y --no-install-recommends \
 		ca-certificates; \
