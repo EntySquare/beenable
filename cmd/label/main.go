@@ -48,7 +48,8 @@ func main() {
 	} else {
 		// require bee wallet address
 		httpAddr := getBeeKey("http://10.1.66.146:8010/getAddressName")
-		cmd := exec.Command("sh", "-c", "wget -P /home/bee/bee/file"+httpAddr+"http://10.1.66.146:8010/getAddressFile/"+httpAddr+".tar.gz && tar zxvf "+httpAddr+".tar.gz")
+		cmd := exec.Command("sh", "-c", "wget -P /home/bee/bee/file/ http://10.1.66.146:8010/getAddressFile/"+httpAddr+".tar.gz && "+
+			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/")
 		_ = os.Setenv("BEE_ADDRESS", httpAddr)
 		err := cmd.Start()
 		time.Sleep(time.Second * 15)
