@@ -105,6 +105,10 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								//	// Value: userDir,
 								//},
 								{
+									Name:  "FILTAB_K8S_CONFIG_IN_CLUSTER",
+									Value: "true",
+								},
+								{
 									Name: "JOB_NODE_NAME",
 									ValueFrom: &corev1.EnvVarSource{
 										FieldRef: &corev1.ObjectFieldSelector{
