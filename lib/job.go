@@ -26,6 +26,11 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 
 	priorityClassName := ""
 
+	privileged := true
+	securityContext := corev1.SecurityContext{
+		Privileged: &privileged,
+	}
+
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:   jobName,
@@ -67,8 +72,9 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 					},
 					Containers: []corev1.Container{
 						{
-							Name:  "enty-bee",
-							Image: entyBeeImage,
+							Name:            "enty-bee",
+							Image:           entyBeeImage,
+							SecurityContext: &securityContext,
 							VolumeMounts: []corev1.VolumeMount{
 								{
 									Name:      "bee-datadir",
