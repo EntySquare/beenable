@@ -30,13 +30,13 @@ func main() {
 	if err != nil {
 		fmt.Print("get pod error", err)
 	}
-	fmt.Printf("get pod success")
+	fmt.Printf("get pod success\n")
 
 	node, err := kclient.CoreV1().Nodes().Get(context.TODO(), nodeName, metav1.GetOptions{})
 	if err != nil {
 		fmt.Print("get node error", err)
 	}
-	fmt.Printf("get node success")
+	fmt.Printf("get node success\n")
 
 	addr := getUnLabelPod(node, kclient)
 	if addr != "" {
@@ -44,23 +44,24 @@ func main() {
 		podLabelMap[addr] = "addr"
 		pod.SetLabels(podLabelMap)
 
-		fmt.Printf("label pod %v=addr", addr)
+		fmt.Printf("label pod %v=addr\n", addr)
 	} else {
 		// require bee wallet address
 		httpAddr := getBeeKey("http://10.1.66.146:8010/getAddressName")
 		cmd := exec.Command("sh", "-c", "wget -P /home/bee/bee/file"+httpAddr+"http://10.1.66.146:8010/getAddressFile/"+httpAddr+".tar.gz && tar zxvf "+httpAddr+".tar.gz")
 		_ = os.Setenv("BEE_ADDRESS", httpAddr)
 		err := cmd.Start()
+		time.Sleep(time.Second * 15)
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("get addr success")
+		fmt.Printf("get addr success,%v\n", httpAddr)
 		podLabelMap[httpAddr] = "addr"
 		pod.SetLabels(podLabelMap)
 		nodeLabelMap[httpAddr] = "addr"
 		node.SetLabels(podLabelMap)
 
-		fmt.Printf("label pod & node %v=addr", addr)
+		fmt.Printf("label pod & node %v=addr\n", httpAddr)
 	}
 }
 
@@ -107,6 +108,6 @@ func getBeeKey(url string) string {
 			panic(err)
 		}
 	}
-	fmt.Printf("get address success %v", result.String())
+	fmt.Printf("get address success %v\n", result.String())
 	return result.String()
 }
