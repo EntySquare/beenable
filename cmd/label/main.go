@@ -38,12 +38,16 @@ func main() {
 		}
 		fmt.Printf("get pod success\n")
 		pod.ObjectMeta.Labels[addr] = "addr"
-		time.Sleep(time.Second * 5)
 		for i := 0; i < 3; i++ {
 			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", addr, err)
 				time.Sleep(time.Second * 5)
+				pod, err = kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
+				if err != nil {
+					fmt.Print("get pod error", err)
+				}
+				fmt.Printf("get pod success\n")
 				continue
 			} else {
 				break
@@ -57,7 +61,6 @@ func main() {
 			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/")
 		_ = os.Setenv("BEE_ADDRESS", httpAddr)
 		err := cmd.Start()
-		time.Sleep(time.Second * 15)
 		if err != nil {
 			panic(err)
 		}
@@ -68,19 +71,22 @@ func main() {
 		}
 		fmt.Printf("get pod success\n")
 		pod.ObjectMeta.Labels[httpAddr] = "addr"
-		time.Sleep(time.Second * 5)
 		for i := 0; i < 3; i++ {
 			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", httpAddr, err)
 				time.Sleep(time.Second * 5)
+				pod, err = kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
+				if err != nil {
+					fmt.Print("get pod error", err)
+				}
+				fmt.Printf("get pod success\n")
 				continue
 			} else {
 				break
 			}
 		}
 		node.ObjectMeta.Labels[httpAddr] = "addr"
-		time.Sleep(time.Second * 5)
 		for i := 0; i < 3; i++ {
 			node, err := kclient.CoreV1().Nodes().Get(context.TODO(), nodeName, metav1.GetOptions{})
 			if err != nil {
@@ -92,6 +98,11 @@ func main() {
 			if err != nil {
 				fmt.Printf("labelpod Update node with new label err:%v=addr , %v\n", httpAddr, err)
 				time.Sleep(time.Second * 5)
+				node, err = kclient.CoreV1().Nodes().Get(context.TODO(), nodeName, metav1.GetOptions{})
+				if err != nil {
+					fmt.Print("get node error", err)
+				}
+				fmt.Printf("get node success\n")
 				continue
 			} else {
 				break
