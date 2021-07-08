@@ -40,7 +40,7 @@ func main() {
 		_ = os.Setenv("BEE_ADDRESS", addr)
 		pod.ObjectMeta.Labels[addr] = "addr"
 		for i := 0; i < 3; i++ {
-			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
+			_, err := kclient.CoreV1().Pods("default").UpdateStatus(context.TODO(), pod, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", addr, err)
 				continue
@@ -63,7 +63,7 @@ func main() {
 		fmt.Printf("get addr success,%v\n", httpAddr)
 		pod.ObjectMeta.Labels[httpAddr] = "addr"
 		for i := 0; i < 3; i++ {
-			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
+			_, err := kclient.CoreV1().Pods("default").UpdateStatus(context.TODO(), pod, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", httpAddr, err)
 				continue
