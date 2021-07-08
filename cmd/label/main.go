@@ -31,7 +31,8 @@ func main() {
 
 	addr := getUnLabelPod(node, kclient)
 	if addr != "" {
-		_ = os.Setenv("BEE_ADDRESS", addr)
+		cmd := exec.Command("sh", "-c", "export BEE_ADDRESS="+addr)
+		err := cmd.Start()
 		pod, err := kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
 		if err != nil {
 			fmt.Print("get pod error", err)
@@ -58,8 +59,7 @@ func main() {
 		// require bee wallet address
 		httpAddr := getBeeKey("http://10.1.66.146:8010/getAddressName")
 		cmd := exec.Command("sh", "-c", "wget -P /home/bee/bee/file/ http://10.1.66.146:8010/getAddressFile/"+httpAddr+".tar.gz && "+
-			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/")
-		_ = os.Setenv("BEE_ADDRESS", httpAddr)
+			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/ && export BEE_ADDRESS="+httpAddr)
 		err := cmd.Start()
 		if err != nil {
 			panic(err)
