@@ -23,9 +23,6 @@ func main() {
 	podName := os.Getenv("JOB_POD_NAME")
 	nodeName := os.Getenv("JOB_NODE_NAME")
 
-	var podLabelMap = make(map[string]string)
-	var nodeLabelMap = make(map[string]string)
-
 	pod, err := kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
 	if err != nil {
 		fmt.Print("get pod error", err)
@@ -41,9 +38,16 @@ func main() {
 	addr := getUnLabelPod(node, kclient)
 	if addr != "" {
 		_ = os.Setenv("BEE_ADDRESS", addr)
-		podLabelMap[addr] = "addr"
-		pod.SetLabels(podLabelMap)
-
+		pod.ObjectMeta.Labels[addr] = "addr"
+		for i := 0; i < 3; i++ {
+			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
+			if err != nil {
+				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", addr, err)
+				continue
+			} else {
+				break
+			}
+		}
 		fmt.Printf("label pod %v=addr\n", addr)
 	} else {
 		// require bee wallet address
@@ -57,10 +61,26 @@ func main() {
 			panic(err)
 		}
 		fmt.Printf("get addr success,%v\n", httpAddr)
-		podLabelMap[httpAddr] = "addr"
-		pod.SetLabels(podLabelMap)
-		nodeLabelMap[httpAddr] = "addr"
-		node.SetLabels(podLabelMap)
+		pod.ObjectMeta.Labels[addr] = "addr"
+		for i := 0; i < 3; i++ {
+			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
+			if err != nil {
+				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", addr, err)
+				continue
+			} else {
+				break
+			}
+		}
+		node.ObjectMeta.Labels[addr] = "addr"
+		for i := 0; i < 3; i++ {
+			_, err := kclient.CoreV1().Nodes().Update(context.TODO(), node, metav1.UpdateOptions{})
+			if err != nil {
+				fmt.Printf("labelpod Update node with new label err:%v=addr , %v\n", addr, err)
+				continue
+			} else {
+				break
+			}
+		}
 
 		fmt.Printf("label pod & node %v=addr\n", httpAddr)
 	}
