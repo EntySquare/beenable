@@ -61,21 +61,21 @@ func main() {
 			panic(err)
 		}
 		fmt.Printf("get addr success,%v\n", httpAddr)
-		pod.ObjectMeta.Labels[addr] = "addr"
+		pod.ObjectMeta.Labels[httpAddr] = "addr"
 		for i := 0; i < 3; i++ {
 			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
 			if err != nil {
-				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", addr, err)
+				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", httpAddr, err)
 				continue
 			} else {
 				break
 			}
 		}
-		node.ObjectMeta.Labels[addr] = "addr"
+		node.ObjectMeta.Labels[httpAddr] = "addr"
 		for i := 0; i < 3; i++ {
 			_, err := kclient.CoreV1().Nodes().Update(context.TODO(), node, metav1.UpdateOptions{})
 			if err != nil {
-				fmt.Printf("labelpod Update node with new label err:%v=addr , %v\n", addr, err)
+				fmt.Printf("labelpod Update node with new label err:%v=addr , %v\n", httpAddr, err)
 				continue
 			} else {
 				break
