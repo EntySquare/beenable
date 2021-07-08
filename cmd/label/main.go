@@ -36,7 +36,7 @@ func main() {
 			fmt.Print("get pod error", err)
 		}
 		fmt.Printf("get pod success\n")
-		cmd := exec.Command("sh", "-c", "echo 'export BEE_ADDRESS="+addr+"' >> /home/bee/profile")
+		cmd := exec.Command("sh", "-c", "echo 'export BEE_ADDRESS="+addr+"' >> /etc/profile")
 		err = cmd.Start()
 		if err != nil {
 			panic(err)
