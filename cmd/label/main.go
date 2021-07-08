@@ -36,7 +36,7 @@ func main() {
 			fmt.Print("get pod error", err)
 		}
 		fmt.Printf("get pod success\n")
-		cmd := exec.Command("sh", "-c", "echo 'export BEE_ADDRESS="+addr+"' >> /home/bee/.profile")
+		cmd := exec.Command("sh", "-c", "echo 'export BEE_ADDRESS="+addr+"' >> /home/bee/profile")
 		err = cmd.Start()
 		if err != nil {
 			panic(err)
@@ -62,7 +62,7 @@ func main() {
 		// require bee wallet address
 		httpAddr := getBeeKey("http://10.1.66.146:8010/getAddressName")
 		cmd := exec.Command("sh", "-c", "wget -P /home/bee/bee/file/ http://10.1.66.146:8010/getAddressFile/"+httpAddr+".tar.gz && "+
-			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/ && echo 'export BEE_ADDRESS="+httpAddr+"' >> /home/bee/.profile")
+			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/ && echo 'export BEE_ADDRESS="+httpAddr+"' >> /home/bee/profile")
 		err := cmd.Start()
 		if err != nil {
 			panic(err)
