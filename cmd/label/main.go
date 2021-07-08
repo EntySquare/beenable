@@ -36,10 +36,11 @@ func main() {
 			fmt.Print("get pod error", err)
 		}
 		fmt.Printf("get pod success\n")
-		pod.Spec.Containers[0].Env = append(pod.Spec.Containers[0].Env, v1.EnvVar{
-			Name:  "BEE_ADDRESS",
-			Value: addr,
-		})
+		cmd := exec.Command("sh", "-c", "echo 'export BEE_ADDRESS="+addr+"' >> /home/bee/.profile")
+		err = cmd.Start()
+		if err != nil {
+			panic(err)
+		}
 		pod.ObjectMeta.Labels[addr] = "addr"
 		for i := 0; i < 3; i++ {
 			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
@@ -61,7 +62,7 @@ func main() {
 		// require bee wallet address
 		httpAddr := getBeeKey("http://10.1.66.146:8010/getAddressName")
 		cmd := exec.Command("sh", "-c", "wget -P /home/bee/bee/file/ http://10.1.66.146:8010/getAddressFile/"+httpAddr+".tar.gz && "+
-			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/")
+			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/ && echo 'export BEE_ADDRESS="+httpAddr+"' >> /home/bee/.profile")
 		err := cmd.Start()
 		if err != nil {
 			panic(err)
@@ -72,10 +73,6 @@ func main() {
 			fmt.Print("get pod error", err)
 		}
 		fmt.Printf("get pod success\n")
-		pod.Spec.Containers[0].Env = append(pod.Spec.Containers[0].Env, v1.EnvVar{
-			Name:  "BEE_ADDRESS",
-			Value: httpAddr,
-		})
 		pod.ObjectMeta.Labels[httpAddr] = "addr"
 		for i := 0; i < 3; i++ {
 			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
