@@ -118,6 +118,7 @@ func getUnLabelPod(node *v1.Node, kclient *kubernetes.Clientset) string {
 	var pods *v1.PodList
 	var err error
 	for i, v := range nodeLabels {
+		fmt.Printf("nodelabel %v=%v", i, v)
 		if v != "addr" {
 			continue
 		}
@@ -130,9 +131,11 @@ func getUnLabelPod(node *v1.Node, kclient *kubernetes.Clientset) string {
 			}
 		}
 		if pods == nil {
+			fmt.Printf("node has keys rest")
 			return i
 		}
 	}
+	fmt.Printf("no keys rest")
 	return ""
 }
 
