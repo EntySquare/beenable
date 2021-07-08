@@ -48,7 +48,8 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 					Affinity: &corev1.Affinity{
 						NodeAffinity: &nodeAffinity,
 					},
-					RestartPolicy: jobRestartPolicy,
+					ServiceAccountName: "filtab-job-service-account",
+					RestartPolicy:      jobRestartPolicy,
 					Volumes: []corev1.Volume{
 						{
 							Name: "bee-datadir",
