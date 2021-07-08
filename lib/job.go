@@ -59,15 +59,15 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								},
 							},
 						},
-						//{
-						//	Name: "bee-kubernets",
-						//	VolumeSource: corev1.VolumeSource{
-						//		HostPath: &corev1.HostPathVolumeSource{
-						//			Path: "/root/.kube",
-						//			Type: &sectorDataDirHostType,
-						//		},
-						//	},
-						//},
+						{
+							Name: "bee-kubernets",
+							VolumeSource: corev1.VolumeSource{
+								HostPath: &corev1.HostPathVolumeSource{
+									Path: "/root/.kube",
+									Type: &sectorDataDirHostType,
+								},
+							},
+						},
 					},
 					Containers: []corev1.Container{
 						{
@@ -79,16 +79,16 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 									Name:      "bee-datadir",
 									MountPath: "/home/bee/bee/file",
 								},
-								//{
-								//	Name:      "bee-kubernets",
-								//	MountPath: "/root/.kube",
-								//},
+								{
+									Name:      "bee-kubernets",
+									MountPath: "/root/.kube",
+								},
 							},
 							Command: []string{"/bin/sh", "-c"},
-							Args: []string{"bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
+							Args: []string{"label && bee start --swap-endpoint=" + swapEndpoint + " --swap-enable=" + swapEnable + " --debug-api-enable=" +
 								debugApiEnable + " --swap-initial-deposit=" + swapInitDeposit + " --network-id=" + networkId + " --full-node=" + fullNode +
 								" --verbosity=" + verbosity + " --clef-signer-enable=" + clefEnable + " --swap-deployment-gas-price " + swapGas +
-								" --password=" + password + " --data-dir=" + dataDir + " --mainnet=" + mainnet},
+								" --password=" + password + " --data-dir=" + dataDir + "/$BEE_ADDRESS" + " --mainnet=" + mainnet},
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "api-addr",
