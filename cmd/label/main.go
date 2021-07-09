@@ -120,7 +120,7 @@ func getUnLabelPod(node *v1.Node, kclient *kubernetes.Clientset) string {
 	nodeLabels := node.ObjectMeta.Labels
 	var pods *v1.PodList
 	var err error
-	for i, v := range nodeLabels { // addr1 addr2
+	for i, v := range nodeLabels {
 		fmt.Printf("nodelabel %v=%v\n", i, v)
 		if v != "addr" {
 			continue
