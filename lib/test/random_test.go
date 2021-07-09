@@ -26,13 +26,15 @@ func GenerateRangeNum(min, max int) int {
 }
 
 func TestRange(t *testing.T) {
-	a := []string{"Error", "Error", "Error", "Running"}
-	var b []string
-	for x, y := range a {
-		if y == "Running" {
-			//a = append(a[:x],a[x+1:]...)
-			b = append(b, y)
-		}
-		fmt.Println(b, x)
-	}
+	//a := []string{"Error", "Error", "Error", "Running"}
+	//var b []string
+	//for x, y := range a {
+	//	if y == "Running" {
+	//		//a = append(a[:x],a[x+1:]...)
+	//		b = append(b, y)
+	//	}
+	//	fmt.Println(b, x)
+	//}
+	var err error
+	fmt.Println(err)
 }

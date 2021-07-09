@@ -120,31 +120,33 @@ func getUnLabelPod(node *v1.Node, kclient *kubernetes.Clientset) string {
 	nodeLabels := node.ObjectMeta.Labels
 	var pods *v1.PodList
 	var err error
-	for i, v := range nodeLabels {
+	for i, v := range nodeLabels { // addr1 addr2
 		fmt.Printf("nodelabel %v=%v\n", i, v)
 		if v != "addr" {
 			continue
 		}
 		for j := 0; j < 3; j++ {
-			pods, err = kclient.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{
-				LabelSelector: i + "=addr",
-			})
-			if err != nil {
+			if pods, err = kclient.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{LabelSelector: i + "=addr"}); err == nil {
 				break
 			}
+		}
+		if err != nil {
+			panic("require pods fail")
 		}
 		if pods == nil {
 			fmt.Printf("no podslist\n")
 			return i
 		} else {
-			var podList []v1.Pod
+			//var podList []v1.Pod
+			var runNum int
 			for _, y := range pods.Items {
 				if y.Status.Phase == "Running" {
-					//pods.Items = append(pods.Items[:x], pods.Items[x+1:]...)
-					podList = append(podList, y)
+					//podList = append(podList, y)
+					runNum++
 				}
 			}
-			if len(podList) == 0 {
+			if runNum == 0 {
+				//if len(podList) == 0 {
 				fmt.Printf("node has keys rest\n")
 				return i
 			}
