@@ -137,9 +137,9 @@ func getUnLabelPod(node *v1.Node, kclient *kubernetes.Clientset) string {
 			fmt.Printf("no podslist\n")
 			return i
 		} else {
-			for i, v := range pods.Items {
-				if v.Status.Phase != "Running" {
-					pods.Items = append(pods.Items[:i], pods.Items[i+1:]...)
+			for x, y := range pods.Items {
+				if y.Status.Phase != "Running" {
+					pods.Items = append(pods.Items[:x], pods.Items[x+1:]...)
 				}
 			}
 			if len(pods.Items) == 0 {
