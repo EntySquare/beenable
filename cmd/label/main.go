@@ -31,23 +31,22 @@ func main() {
 
 	addr := getUnLabelPod(node, kclient)
 	if addr != "" {
+		fmt.Println("using existing address", addr)
 		pod, err := kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
 		if err != nil {
 			fmt.Print("get pod error", err)
 		}
 		fmt.Printf("get pod success\n")
-		cmd := exec.Command("sh", "-c", "echo "+addr+" > /home/bee/bee/file/address.txt")
-		err = cmd.Start()
-		err = cmd.Wait()
-		if err != nil {
-			panic(err)
-		}
+		//cmd := exec.Command("sh", "-c", "echo "+addr+" > /home/bee/bee/file/address.txt")
+		//err = cmd.Start()
+		//err = cmd.Wait()
+
 		pod.ObjectMeta.Labels[addr] = "addr"
 		for i := 0; i < 3; i++ {
 			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", addr, err)
-				time.Sleep(time.Second * 3)
+				time.Sleep(time.Second * 5)
 				pod, err = kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
 				if err != nil {
 					fmt.Print("get pod error", err)
@@ -58,12 +57,19 @@ func main() {
 				break
 			}
 		}
-		fmt.Printf("label pod %v=addr\n", addr)
+		cmd := exec.Command("sh", "-c", "echo "+addr+" > /home/bee/bee/file/address.txt")
+		err = cmd.Start()
+		err = cmd.Wait()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("label successed pod %v=addr\n", addr)
 	} else {
+		fmt.Println("using new address")
 		// require bee wallet address
 		httpAddr := getBeeKey("http://10.1.66.146:8010/getAddressName")
 		cmd := exec.Command("sh", "-c", "wget -P /home/bee/bee/file/ http://10.1.66.146:8010/getAddressFile/"+httpAddr+".tar.gz && "+
-			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/ && echo "+httpAddr+" > /home/bee/bee/file/address.txt")
+			"tar zxvf /home/bee/bee/file/"+httpAddr+".tar.gz -C /home/bee/bee/file/")
 		err := cmd.Start()
 		err = cmd.Wait()
 		if err != nil {
@@ -82,7 +88,7 @@ func main() {
 			_, err := kclient.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update pod with new label err:%v=addr , %v\n", httpAddr, err)
-				time.Sleep(time.Second * 3)
+				time.Sleep(time.Second * 5)
 				pod, err = kclient.CoreV1().Pods("default").Get(context.TODO(), podName, metav1.GetOptions{})
 				if err != nil {
 					fmt.Print("get pod error", err)
@@ -104,7 +110,7 @@ func main() {
 			_, err = kclient.CoreV1().Nodes().Update(context.TODO(), node, metav1.UpdateOptions{})
 			if err != nil {
 				fmt.Printf("labelpod Update node with new label err:%v=addr , %v\n", httpAddr, err)
-				time.Sleep(time.Second * 3)
+				time.Sleep(time.Second * 5)
 				node, err = kclient.CoreV1().Nodes().Get(context.TODO(), nodeName, metav1.GetOptions{})
 				if err != nil {
 					fmt.Print("get node error", err)
@@ -116,7 +122,14 @@ func main() {
 			}
 		}
 
-		fmt.Printf("label pod & node %v=addr\n", httpAddr)
+		exec.Command("echo " + httpAddr + " > /home/bee/bee/file/address.txt")
+		err = cmd.Start()
+		err = cmd.Wait()
+		if err != nil {
+			fmt.Println("write address error", err)
+			panic(err)
+		}
+		fmt.Printf("label successed pod & node %v=addr\n", httpAddr)
 	}
 }
 
