@@ -74,7 +74,7 @@ func (s *StaticStrategy) start() {
 	//limitList["cpu"] = resource.MustParse("10%")
 	//requestList["cpu"] = resource.MustParse("10%")
 	limitList["memory"] = resource.MustParse("1Gi")
-	requestList["memory"] = resource.MustParse("200m")
+	requestList["memory"] = resource.MustParse("500m")
 
 	jbname := "enty-bee-job-" + rand.String(10)
 	fmt.Println("run job : " + jbname)

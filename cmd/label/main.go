@@ -122,7 +122,7 @@ func main() {
 			}
 		}
 
-		echo := exec.Command("echo " + httpAddr + " > /home/bee/bee/file/address.txt")
+		echo := exec.Command("sh", "-c", "echo "+httpAddr+" > /home/bee/bee/file/address.txt")
 		err = echo.Start()
 		err = echo.Wait()
 		if err != nil {
