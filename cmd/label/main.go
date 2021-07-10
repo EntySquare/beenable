@@ -122,9 +122,9 @@ func main() {
 			}
 		}
 
-		exec.Command("echo " + httpAddr + " > /home/bee/bee/file/address.txt")
-		err = cmd.Start()
-		err = cmd.Wait()
+		echo := exec.Command("echo " + httpAddr + " > /home/bee/bee/file/address.txt")
+		err = echo.Start()
+		err = echo.Wait()
 		if err != nil {
 			fmt.Println("write address error", err)
 			panic(err)
