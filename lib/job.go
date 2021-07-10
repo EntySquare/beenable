@@ -100,10 +100,6 @@ func GetJob(jobName string, jobParallelism int32, deleteJobAfterFinishSec int32,
 								Requests: requestList,
 							},
 							Env: []corev1.EnvVar{
-								//{
-								//	Name: "USER_DIR",
-								//	// Value: userDir,
-								//},
 								{
 									Name:  "FILTAB_K8S_CONFIG_IN_CLUSTER",
 									Value: "true",
